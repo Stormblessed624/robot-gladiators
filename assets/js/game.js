@@ -108,7 +108,9 @@ var fight = function(enemy) {
                 playerInfo.name + 
                 " attacked " + 
                 enemy.name + 
-                ". " + 
+                " with " + 
+                damage + 
+                " damage. " + 
                 enemy.name + 
                 " now has " + 
                 enemy.health + 
@@ -132,7 +134,9 @@ var fight = function(enemy) {
                 enemy.name + 
                 " attacked " + 
                 playerInfo.name + 
-                ". " + 
+                " with " + 
+                damage + 
+                " damage. " + 
                 playerInfo.name + 
                 " now has " + 
                 playerInfo.health + 
@@ -186,13 +190,24 @@ var startGame = function() {
 }
 
 var endGame = function() {
-    if (playerInfo.health > 0) {
-        window.alert("Great job, you've survived the game! You now have a score of " + playerInfo.money + ".");
-    } else {
-        window.alert("You've lost your robot battle.")
-    }
-
     window.alert("The game has now ended. Let's see how you did!");
+
+    var highScore = localStorage.getItem("highScore")
+    highScore = highScore || 0;
+
+    //if player has more money than the high score, player has new high score.
+    if (playerInfo.money > highScore) {
+        localStorage.setItem("highScore", playerInfo.money);
+        localStorage.setItem("name", playerInfo.name);
+
+        alert("Congratulations! " + 
+        playerInfo.name + 
+        " now has the high score of " + 
+        playerInfo.money + 
+        "!");
+    } else {
+        alert(playerInfo.name + " did not beat the high score of " + highScore + ". Maybe next time!");
+    }
 
     var playAgainConfirm = window.confirm("Would you like to play again?");
 
@@ -202,7 +217,6 @@ var endGame = function() {
     } else {
         window.alert("Thank you for playing Robot Gladiators! Come back again soon!");
     }
-
 }
 
 var shop = function() {
@@ -223,7 +237,6 @@ var shop = function() {
 
         case 3:
             window.alert("Leaving the store.");
-
             // do nothing, so function will end
             break;
 
@@ -236,10 +249,7 @@ var shop = function() {
     }
 }
 
-
-
 startGame();
-
 
 // Game StatesPHI
 // "Win" - Player robot has defeated all enemy-robots
@@ -251,14 +261,3 @@ startGame();
 //      * Buy health
 //      * Buy attack upgrade
 //      * Leave shop
-
-    // Shoddy replay confirmation
-    // if (playerInfo.health <= 0 || i == enemy.names.length -1) {
-    //     var replayConfirm = window.confirm("Would you like to play again?");
-    //     if (replayConfirm) {
-    //         i = -1;
-    //         playerInfo.health = 100;
-    //     } else {
-    //         window.alert("See you next time!");
-    //     }
-    // }
