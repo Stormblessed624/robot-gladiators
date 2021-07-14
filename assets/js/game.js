@@ -16,6 +16,7 @@ var playerInfo = {
     health: 100,
     attack: 10,
     money: 10,
+    killCount: 0,
     reset: function() {
         this.health = 100;
         this.attack = 10;
@@ -24,7 +25,7 @@ var playerInfo = {
     refillHealth: function() {
         if (this.money >= 7) {
             window.alert("Refilling player's health by 20 for 7 dollars.");
-            this.health += 20;
+            this.health += 30;
             this.money -= 7;
         } else {
             window.alert("You don't have enough money!")
@@ -46,16 +47,28 @@ var playerInfo = {
 var enemyInfo = [
     {
         name: "Roberto",
-        attack: randomNumber(10, 14)
+        attack: randomNumber(7, 10)
     },
     {
         name: "Amy Android",
-        attack: randomNumber(10, 14)
+        attack: randomNumber(8, 12)
     },
     {
         name: "Robo Trumble",
         attack: randomNumber(10, 14)
-    }
+    },
+    {
+        name: "Error Eater",
+        attack: randomNumber(11, 15)
+    },
+    {
+        name: "Destroyinator",
+        attack: randomNumber(12, 16)
+    },
+    {
+        name: "Evil Robo-Cop",
+        attack: randomNumber(14, 18)
+    },
 ];
 
 // Alert players that they are starting the round
@@ -86,6 +99,7 @@ var fightOrSkip = function() {
     return false;
 }
 var fight = function(enemy) {
+
 
     var isPlayerTurn = true;
     if (Math.random() > 0.5) {
@@ -120,6 +134,8 @@ var fight = function(enemy) {
             // check enemy's health
             if (enemy.health <= 0) {
                 window.alert(enemy.name + " has died!");
+                playerInfo.killCount += 1;
+                playerInfo.money += 3;
                 break;
             } else {
                 window.alert(enemy.name + " still has " + enemy.health + " health left.");
@@ -171,7 +187,7 @@ var startGame = function() {
             
             if (i < enemyInfo.length - 1 && playerInfo.health > 0) {
                 //confirm the player wants to shop
-                var storeConfirm = window.confirm("The fight is over, visit the store before the next round?");
+                var storeConfirm = window.confirm("The fight is over, you have " + playerInfo.money + " dollars. visit the store before the next round?");
 
                 // if yes, take them to the store() function
                 if (storeConfirm) {
@@ -196,17 +212,17 @@ var endGame = function() {
     highScore = highScore || 0;
 
     //if player has more money than the high score, player has new high score.
-    if (playerInfo.money > highScore) {
-        localStorage.setItem("highScore", playerInfo.money);
+    if (playerInfo.killCount > highScore) {
+        localStorage.setItem("highScore", playerInfo.killCount);
         localStorage.setItem("name", playerInfo.name);
 
         alert("Congratulations! " + 
         playerInfo.name + 
         " now has the high score of " + 
-        playerInfo.money + 
-        "!");
+        playerInfo.killCount + 
+        " kills!");
     } else {
-        alert(playerInfo.name + " did not beat the high score of " + highScore + ". Maybe next time!");
+        alert(playerInfo.name + " did not beat the high score of " + highScore + " kills. Maybe next time!");
     }
 
     var playAgainConfirm = window.confirm("Would you like to play again?");
